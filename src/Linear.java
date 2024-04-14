@@ -1,99 +1,100 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Linear implements PerfectHashTable {
     private List<Integer>[] firstLevelTable;
-    private List<Integer>[] secondLevelTables;
     private int size;
     private int collisionCount;
+    private static final double LOAD_FACTOR_THRESHOLD = 0.8; // Adjust load factor threshold as needed
+    private static final int INITIAL_CAPACITY = 8; // Initial capacity of the hash table
 
-    public Linear(int[] keys) {
-        size = keys.length;
+    public Linear() {
+        size = INITIAL_CAPACITY;
+        initializeTables();
+    }
 
-        // Initialize first-level table
+    private void initializeTables() {
         firstLevelTable = new ArrayList[size];
         for (int i = 0; i < size; i++) {
             firstLevelTable[i] = new ArrayList<>();
         }
+    }
 
-        // Populate first-level table
-        for (int key : keys) {
-            int index = hash(key);
-            firstLevelTable[index].add(key);
-        }
+    private void resizeTables() {
+        int newSize = size * 2; // Incrementally increase the size of the table
+        List<Integer>[] newFirstLevelTable = new ArrayList[newSize];
 
-        // Initialize second-level tables and rehash with linear probing
-        secondLevelTables = new ArrayList[size];
+        // Rehash keys into the new tables
         for (int i = 0; i < size; i++) {
-            if (firstLevelTable[i].size() > 0) {
-                secondLevelTables[i] = new ArrayList<>();
-                int M = firstLevelTable[i].size() * firstLevelTable[i].size();
-                Random random = new Random();
-                while (true) {
-                    boolean collision = false;
-                    int[] tempTable = new int[M];
-                    for (int key : firstLevelTable[i]) {
-                        int hashValue = key % M;
-                        while (tempTable[hashValue] != 0) {
-                            collision = true;
-                            collisionCount++; // Increment collision count
-                            hashValue = (hashValue + 1) % M; // Linear probing
-                        }
-                        tempTable[hashValue] = key;
+            if (firstLevelTable[i] != null) {
+                for (int key : firstLevelTable[i]) {
+                    int index = hash(key, newSize);
+                    if (newFirstLevelTable[index] == null) {
+                        newFirstLevelTable[index] = new ArrayList<>();
                     }
-                    if (!collision) {
-                        for (int value : tempTable) {
-                            if (value != 0) {
-                                secondLevelTables[i].add(value);
-                            }
-                        }
-                        break;
-                    }
+                    newFirstLevelTable[index].add(key);
                 }
             }
         }
+
+        size = newSize;
+        firstLevelTable = newFirstLevelTable;
     }
 
-    private int hash(int key) {
-        int hashValue = key % size;
-        return hashValue >= 0 ? hashValue : hashValue + size; // Ensure non-negativity
+    private int hash(int key, int tableSize) {
+        return Math.abs(key % tableSize); // Ensure non-negative index
     }
-
 
     @Override
     public boolean search(int key) {
-        int index = hash(key);
-        if (secondLevelTables[index] != null) {
-            for (int value : secondLevelTables[index]) {
-                if (value == key) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        int index = hash(key, size);
+        List<Integer> list = firstLevelTable[index];
+        return list != null && list.contains(key);
     }
 
     @Override
     public void insert(int key) {
-        int index = hash(key);
-        if (secondLevelTables[index] == null) {
-            secondLevelTables[index] = new ArrayList<>();
+        if (firstLevelTable == null) {
+            initializeTables();
         }
-        secondLevelTables[index].add(key);
+        if (calculateLoadFactor() >= LOAD_FACTOR_THRESHOLD) {
+            resizeTables();
+        }
+
+        int index = hash(key, size);
+        if (firstLevelTable[index] == null) {
+            firstLevelTable[index] = new ArrayList<>();
+        } else {
+            collisionCount++; // Increment collision count if there's already a list at this index
+        }
+        firstLevelTable[index].add(key);
+    }
+    private int countElements() {
+        int count = 0;
+        for (List<Integer> list : firstLevelTable) {
+            if (list != null) {
+                count += list.size();
+            }
+        }
+        return count;
+    }
+
+    private double calculateLoadFactor() {
+        return (double) countElements() / size;
     }
 
     @Override
     public void delete(int key) {
-        int index = hash(key);
-        if (secondLevelTables[index] != null) {
-            secondLevelTables[index].removeIf(value -> value == key);
+        int index = hash(key, size);
+        List<Integer> list = firstLevelTable[index];
+        if (list != null) {
+            list.remove(Integer.valueOf(key));
         }
     }
 
     public int getSpaceUsage() {
         int spaceUsage = 0;
-        for (List<Integer> list : secondLevelTables) {
+        for (List<Integer> list : firstLevelTable) {
             if (list != null) {
                 spaceUsage += list.size() * Integer.BYTES;
             }

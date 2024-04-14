@@ -1,4 +1,5 @@
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -32,12 +33,11 @@ public class Main {
 
         if (choice == 1) {
             System.out.println("You have selected O(N^2) Space.");
-            int[] keys = {5, 10, 15, 20}; // Sample keys
-            hashTable = new Linear(keys);
+            hashTable = new Quadratic();
         } else if (choice == 2) {
             System.out.println("You have selected O(N) Space.");
-            int[] keys = {5, 10, 15, 2}; // Sample keys
-            hashTable = new Quadratic(keys);
+            hashTable = new Linear();
+
         }
 
         Dictionary dictionary = new Dictionary(hashTable);
