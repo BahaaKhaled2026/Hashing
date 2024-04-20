@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class PerfectHashTableON2<E> {
 
+    private int counter;
     private int size; // Size of the hash table
     boolean[][] hashMatrix; // Hash matrix for the hashing
     final private double loadFactor = 0.75; // Load factor for resizing
@@ -19,8 +20,9 @@ public class PerfectHashTableON2<E> {
     }
 
     public PerfectHashTableON2(int cap) {
-        if(this.size<=0)
+        if (cap <= 0) {
             throw new IllegalArgumentException("Size must be positive");
+        }
         this.size = cap * cap;
         this.hashMatrix = HashingFunctions.generateHashMatrix(this.size);
         this.table = (E[]) new Object[size];
@@ -29,6 +31,7 @@ public class PerfectHashTableON2<E> {
     // Method to perform perfect hashing using the O(N^2) method
     public void createPerfectHashTable() {
         boolean collision;
+        counter = 0;
         do {
             collision = false;
             boolean[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
@@ -38,6 +41,7 @@ public class PerfectHashTableON2<E> {
                 int hashValue = HashingFunctions.multiplyMatrix(hashFunction, HashingFunctions.decimalToBinary(key)) % size;
                 if (table[hashValue] != null) {
                     collision = true;
+                    counter++;
                     break;
                 }
                 table[hashValue] = item;
@@ -125,5 +129,9 @@ public class PerfectHashTableON2<E> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getCounter() {
+        return counter;
     }
 }

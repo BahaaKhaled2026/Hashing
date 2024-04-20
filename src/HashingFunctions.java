@@ -5,7 +5,7 @@ public class HashingFunctions {
     // Method to generate a random binary matrix for hashing
     public static boolean[][] generateHashMatrix(int tableSize) {
         Random random = new Random();
-        int numRows = (int)Math.ceil(Math.log(tableSize)/Math.log(2)); // Number of rows = logN
+        int numRows = (int) Math.ceil(Math.log(tableSize) / Math.log(2)); // Number of rows = logN
         int numCols = Integer.SIZE; // Number of columns = 32 bits (for the domain)
         boolean[][] hashMatrix = new boolean[numRows][numCols];
 
