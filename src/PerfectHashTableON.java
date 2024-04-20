@@ -1,65 +1,213 @@
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Arrays;
 
-public class PerfectHashTableON {
+public class PerfectHashTableON <K, V> {
+    public static class Entry<K, V> {
+        private final K key;
+        private V value;
 
-    private int[] keys; // Array to store keys
-    private int size; // Size of the hash table
-    private int[][] hashMatrix; // Hash matrix for the first-level hashing
-    private Random random;
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
 
-    public PerfectHashTableON(int[] keys) {
-        this.keys = keys;
-        this.size = keys.length;
-        this.hashMatrix = HashingFunctions.generateHashMatrix((int) Math.ceil(Math.log(size) / Math.log(2)));
-        this.random = new Random();
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
     }
 
-    // Method to perform perfect hashing using the O(N) method
-    public void createPerfectHashTable() {
-        // First-level hashing
-        int[][] firstLevelTable = new int[size][];
-        for (int i = 0; i < keys.length; i++) {
-            int hashValue = HashingFunctions.multiplyMatrix(hashMatrix, HashingFunctions.decimalToBinary(keys[i]))%size;
-            if (firstLevelTable[hashValue] == null) {
-                firstLevelTable[hashValue] = new int[]{keys[i]};
-            } else {
-                ArrayList<Integer> collisionList = new ArrayList<>();
-                for (int k : firstLevelTable[hashValue]) {
-                    collisionList.add(k);
+    private ArrayList<Entry<K, V>>[] table;
+    private int[] maxElementsInBucket;
+    private int size;
+    private int[] realUsedSpaceOfBucket;
+    private static final double MAX_LOAD_FACTOR = 0.75;
+    private static final int INITIAL_CAPACITY = 10;
+    private static final int MAX_ELEMENTS_IN_BUCKET = 3;
+    private boolean[][] firstLevelHashMatrix;
+    private boolean[][][] secondLevelHashMatrix;
+
+    public PerfectHashTableON() {
+        this(INITIAL_CAPACITY);
+    }
+
+    public PerfectHashTableON(int size) {
+        if(size <= 0){
+            throw new IllegalArgumentException("Size must be positive");
+        }
+        if(size < 2){
+            size = 2;
+        }
+        table = new ArrayList[size];
+        for (int i = 0; i < size; i++) {
+            table[i] = new ArrayList<>();
+        }
+        secondLevelHashMatrix = new boolean[size][][];
+        maxElementsInBucket= new int[size];
+        Arrays.fill(maxElementsInBucket, MAX_ELEMENTS_IN_BUCKET);
+        this.size = 0;
+        firstLevelHashMatrix = HashingFunctions.generateHashMatrix(size);
+        realUsedSpaceOfBucket = new int[size];
+    }
+
+    public void put(K key, V value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
+        if (table[firstLevelHashIndex].isEmpty()) {
+            table[firstLevelHashIndex].add(new Entry<>(key, value));
+            size++;
+            realUsedSpaceOfBucket[firstLevelHashIndex]++;
+        }
+        else {
+            boolean collision;
+            ArrayList<Entry<K, V>>temp;
+            boolean[][] secondLevelHashFunction;
+            int usedSpace;
+            do{
+                secondLevelHashFunction = HashingFunctions.generateHashMatrix(maxElementsInBucket[firstLevelHashIndex]);
+                collision = false;
+                temp = new ArrayList<>();
+                for(int i = 0; i < maxElementsInBucket[firstLevelHashIndex];i++){
+                    temp.add(null);
                 }
-                collisionList.add(keys[i]);
-                firstLevelTable[hashValue] = collisionList.stream().mapToInt(Integer::intValue).toArray();
-            }
+                int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashFunction, HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+                temp.set(secondLevelHashIndex, new Entry<>(key, value));
+                usedSpace = 1;
+                for(Entry<K, V> entry : table[firstLevelHashIndex]){
+                    if(entry == null){
+                        continue;
+                    }
+                    int index = HashingFunctions.multiplyMatrix(secondLevelHashFunction, HashingFunctions.decimalToBinary(entry.getKey().hashCode()))% maxElementsInBucket[firstLevelHashIndex];
+                    if(temp.get(index) != null && !temp.get(index).getKey().equals(entry.getKey())){
+                        collision = true;
+                        break;
+                    }
+                    if(temp.get(index) == null) {
+                        temp.set(index, entry);
+                        usedSpace++;
+                    }
+                }
+            }while(collision);
+            table[firstLevelHashIndex] = temp;
+            secondLevelHashMatrix[firstLevelHashIndex] = secondLevelHashFunction;
+            realUsedSpaceOfBucket[firstLevelHashIndex] = usedSpace;
         }
-        // Second-level hashing
-        for (int i = 0; i < firstLevelTable.length; i++) {
-            if (firstLevelTable[i] != null && firstLevelTable[i].length > 1) {
-                PerfectHashTableON2 secondLevelTable = new PerfectHashTableON2(firstLevelTable[i]);
-                secondLevelTable.createPerfectHashTable();
-                firstLevelTable[i] = secondLevelTable.hashMatrix[0];
-            }
+        double loadFactor = (double) size / table.length;
+        if (loadFactor > MAX_LOAD_FACTOR) {
+            resize();
         }
-        // Store the result
-        this.hashMatrix = firstLevelTable;
+        else if((double)realUsedSpaceOfBucket[firstLevelHashIndex]/maxElementsInBucket[firstLevelHashIndex] > MAX_LOAD_FACTOR){
+            maxElementsInBucket[firstLevelHashIndex] *= 2;
+            resizeBucket(firstLevelHashIndex);
+        }
     }
-
-    // Method to print the hash table
-    public void printHashTable() {
-        if (hashMatrix == null) {
-            System.out.println("Hash table is not created yet!");
+    public V get(K key){
+        if(key == null){
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
+        if(realUsedSpaceOfBucket[firstLevelHashIndex] == 0){
+            return null;
+        }
+        else if(realUsedSpaceOfBucket[firstLevelHashIndex] == 1){
+            if(table[firstLevelHashIndex].get(0).getKey().equals(key)){
+                return table[firstLevelHashIndex].get(0).getValue();
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+            if(table[firstLevelHashIndex].get(secondLevelHashIndex) == null){
+                return null;
+            }
+            else{
+                return table[firstLevelHashIndex].get(secondLevelHashIndex).getValue();
+            }
+        }
+    }
+    public void remove(K key){
+        if(key == null){
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+        int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
+        if(table[firstLevelHashIndex].isEmpty()){
             return;
         }
-        System.out.println("Hash Table:");
-        for (int i = 0; i < hashMatrix.length; i++) {
-            if (hashMatrix[i] == null) {
-                System.out.println("null");
-            } else {
-                for (int j = 0; j < hashMatrix[i].length; j++) {
-                    System.out.print(hashMatrix[i][j] + " ");
-                }
-                System.out.println();
+        else if(table[firstLevelHashIndex].size() == 1){
+            if(table[firstLevelHashIndex].get(0).getKey().equals(key)){
+                table[firstLevelHashIndex].set(0, null);
+                realUsedSpaceOfBucket[firstLevelHashIndex]--;
             }
+            else{
+                return;
+            }
+        }
+        else{
+            int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+            if(table[firstLevelHashIndex].get(secondLevelHashIndex) == null){
+                return;
+            }
+            else{
+                table[firstLevelHashIndex].set(secondLevelHashIndex, null);
+                realUsedSpaceOfBucket[firstLevelHashIndex]--;
+            }
+        }
+    }
+    public void resize(){
+        ArrayList<Entry<K, V>>[] temp = table;
+        table = new ArrayList[table.length * 2];
+        for (int i = 0; i < table.length; i++) {
+            table[i] = new ArrayList<>();
+        }
+        size =0;
+        maxElementsInBucket = new int[table.length];
+        realUsedSpaceOfBucket = new int[table.length];
+        Arrays.fill(maxElementsInBucket, MAX_ELEMENTS_IN_BUCKET);
+        firstLevelHashMatrix = HashingFunctions.generateHashMatrix(table.length);
+        secondLevelHashMatrix = new boolean[table.length][][];
+        for(ArrayList<Entry<K, V>> bucket : temp){
+            if(bucket.isEmpty()){
+                continue;
+            }
+            for(Entry<K, V> entry : bucket){
+                if(entry == null){
+                    continue;
+                }
+                put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+    public void resizeBucket(int index){
+        ArrayList<Entry<K, V>> temp = table[index];
+        table[index] = new ArrayList<>();
+        secondLevelHashMatrix[index] = HashingFunctions.generateHashMatrix(maxElementsInBucket[index]);
+        for(Entry<K, V> entry : temp){
+            put(entry.getKey(), entry.getValue());
+        }
+    }
+    public void print(){
+        for(int i = 0; i < table.length; i++){
+            System.out.print(i + ": ");
+            for(Entry<K, V> entry : table[i]){
+                if(entry == null){
+                    continue;
+                }
+                else{
+                    System.out.print(entry.getKey() + " ");
+                }
+            }
+            System.out.println();
         }
     }
 }
