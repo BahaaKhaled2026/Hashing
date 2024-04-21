@@ -108,7 +108,7 @@ public class PerfectHashTableON<K, V> {
         if (loadFactor > MAX_LOAD_FACTOR) {
             resize();
         } else if ((double) realUsedSpaceOfBucket[firstLevelHashIndex] / maxElementsInBucket[firstLevelHashIndex] > MAX_LOAD_FACTOR) {
-            maxElementsInBucket[firstLevelHashIndex] *= 2;
+            maxElementsInBucket[firstLevelHashIndex] *= maxElementsInBucket[firstLevelHashIndex];
             resizeBucket(firstLevelHashIndex);
         }
     }
@@ -147,21 +147,24 @@ public class PerfectHashTableON<K, V> {
         }
         int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
         if (table[firstLevelHashIndex].isEmpty()) {
-            System.out.println("Element is not existed in the table");
+            System.out.println("Element is not exist in the table");
             return;
         } else if (table[firstLevelHashIndex].size() == 1) {
-            if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
+            if (table[firstLevelHashIndex].get(0) == null){
+                System.out.println("Element is not exist in the table");
+            }
+            else if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
                 table[firstLevelHashIndex].set(0, null);
                 realUsedSpaceOfBucket[firstLevelHashIndex]--;
                 System.out.println("Element is removed");
             } else {
-                System.out.println("Element is not existed in the table");
+                System.out.println("Element is not exist in the table");
                 return;
             }
         } else {
             int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
             if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
-                System.out.println("Element is not existed in the table");
+                System.out.println("Element is not exist in the table");
                 return;
             } else {
                 table[firstLevelHashIndex].set(secondLevelHashIndex, null);
