@@ -3,9 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class BatchOperations {
-    private static PerfectHashTableON<String, String> dictionary;
-    public static void batchInsert(String path){
-        dictionary = new PerfectHashTableON<>();
+    public static void batchInsert(String path, PerfectHashTableON<String, String> dictionary){
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -15,8 +13,7 @@ public class BatchOperations {
             throw new RuntimeException(e);
         }
     }
-    public static void batchDelete(String path){
-        dictionary = new PerfectHashTableON<>();
+    public static void batchDelete(String path, PerfectHashTableON<String, String> dictionary){
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
