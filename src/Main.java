@@ -157,7 +157,11 @@ public class Main {
                                 case 3:
                                     System.out.println("Enter element to search:");
                                     String searchElement = scanner.nextLine();
-                                    perfectHashTableON2.search(searchElement);
+                                    if (!perfectHashTableON2.search(searchElement).equals("")) {
+                                        System.out.println("We found \" " + perfectHashTableON2.search(searchElement) + " \"");
+                                    } else {
+                                        System.out.println("Element not found");
+                                    }
                                     break;
                                 case 4:
                                     System.out.println("Hash table contents:");
@@ -211,7 +215,11 @@ public class Main {
                                 case 3:
                                     System.out.println("Enter element to search:");
                                     String searchElement = scanner.nextLine();
-                                    perfectHashTableON2.search(searchElement);
+                                    if (!perfectHashTableON2.search(searchElement).equals("")) {
+                                        System.out.println("We found \" " + perfectHashTableON2.search(searchElement) + " \"");
+                                    } else {
+                                        System.out.println("Element not found");
+                                    }
                                     break;
                                 case 4:
                                     System.out.println("Hash table contents:");

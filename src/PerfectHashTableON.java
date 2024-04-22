@@ -30,7 +30,7 @@ public class PerfectHashTableON<K, V> {
     private int size;
     private int[] realUsedSpaceOfBucket;
     private static final double MAX_LOAD_FACTOR = 0.75;
-    private static final int INITIAL_CAPACITY = 10;
+    private static final int INITIAL_CAPACITY = 500;
     private static final int MAX_ELEMENTS_IN_BUCKET = 3;
     private boolean[][] firstLevelHashMatrix;
     private boolean[][][] secondLevelHashMatrix;

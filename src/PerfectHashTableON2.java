@@ -14,7 +14,7 @@ public class PerfectHashTableON2<E> {
     Map<E, Integer> elements = new HashMap<>();
 
     public PerfectHashTableON2() {
-        this.size = 10;
+        this.size = 500;
         this.hashMatrix = HashingFunctions.generateHashMatrix(this.size);
         this.table = (E[]) new Object[size];
     }
@@ -95,18 +95,17 @@ public class PerfectHashTableON2<E> {
         }
     }
 
-    public void search(E input) {
+    public String search(E input) {
         int key = input.hashCode();
         int hashValue = HashingFunctions.multiplyMatrix(hashMatrix, HashingFunctions.decimalToBinary(key)) % size;
         if (table[hashValue] != null) {
             if (table[hashValue].equals(input)) {
-                System.out.println("Element found");
+                return input.toString();
             } else
-                System.out.println("Element not found");
+                return "";
+        } else
+            return "";
 
-        } else {
-            System.out.println("Element not found");
-        }
     }
 
     public void batchInsertFromFile(String filePath) {

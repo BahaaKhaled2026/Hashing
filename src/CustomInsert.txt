@@ -1,0 +1,12 @@
+xabc
+xacb
+xbac
+xbca
+xcab
+xcba
+axbc
+axcb
+bxac
+bxca
+cxab
+cxba
