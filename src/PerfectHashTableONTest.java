@@ -520,6 +520,58 @@ public class PerfectHashTableONTest {
         }
     }
 
-    
+    @Test
+    @DisplayName("Long words Insertion [O(N)]")
+    public void LongWordsInsertionOn() throws IOException {
+        var HashON = new PerfectHashTableON<String, String>();
+        var bo = new BatchOperations();
+        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\LongStrings.txt";
+
+        BufferedReader reader = new BufferedReader(new FileReader(batchPath));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        bo.batchInsert(batchPath, HashON);
+        for (String word : wordsList) {
+            assertEquals(HashON.get(word), word);
+        }
+    }
+
+
+    @Test
+    @DisplayName("Long words Insertion [O(N^2)]")
+    public void LongWordsInsertionOn2() throws IOException {
+        var HashON2 = new PerfectHashTableON2<>();
+        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\LongStrings.txt";
+
+        BufferedReader reader = new BufferedReader(new FileReader(batchPath));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        HashON2.batchInsertFromFile(batchPath);
+        for (String word : wordsList) {
+            assertEquals(HashON2.search(word), word);
+        }
+    }
+
+
 
 }
