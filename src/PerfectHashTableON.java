@@ -122,9 +122,22 @@ public class PerfectHashTableON<K, V> {
             System.out.println("Element is not found");
             return null;
         } else if (realUsedSpaceOfBucket[firstLevelHashIndex] == 1) {
-            if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
+            if(secondLevelHashMatrix[firstLevelHashIndex] == null){
+                if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
+                    System.out.println("Element is found");
+                    return table[firstLevelHashIndex].get(0).getValue();
+                } else {
+                    System.out.println("Element is not found");
+                    return null;
+                }
+            }
+            int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+            if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
+                System.out.println("Element is not found");
+                return null;
+            } else if (table[firstLevelHashIndex].get(secondLevelHashIndex).getKey().equals(key)) {
                 System.out.println("Element is found");
-                return table[firstLevelHashIndex].get(0).getValue();
+                return table[firstLevelHashIndex].get(secondLevelHashIndex).getValue();
             } else {
                 System.out.println("Element is not found");
                 return null;
@@ -149,12 +162,22 @@ public class PerfectHashTableON<K, V> {
         if (table[firstLevelHashIndex].isEmpty()) {
             System.out.println("Element is not exist in the table");
             return;
-        } else if (table[firstLevelHashIndex].size() == 1) {
-            if (table[firstLevelHashIndex].get(0) == null){
-                System.out.println("Element is not exist in the table");
+        } else if (realUsedSpaceOfBucket[firstLevelHashIndex] == 1) {
+            if(secondLevelHashMatrix[firstLevelHashIndex] == null){
+                if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
+                    table[firstLevelHashIndex].set(0, null);
+                    realUsedSpaceOfBucket[firstLevelHashIndex]--;
+                    System.out.println("Element is removed");
+                } else {
+                    System.out.println("Element is not exist in the table");
+                }
+                return;
             }
-            else if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
-                table[firstLevelHashIndex].set(0, null);
+            int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+            if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
+                System.out.println("Element is not exist in the table");
+            } else if (table[firstLevelHashIndex].get(secondLevelHashIndex).getKey().equals(key)) {
+                table[firstLevelHashIndex].set(secondLevelHashIndex, null);
                 realUsedSpaceOfBucket[firstLevelHashIndex]--;
                 System.out.println("Element is removed");
             } else {
@@ -204,17 +227,22 @@ public class PerfectHashTableON<K, V> {
         table[index] = new ArrayList<>();
         secondLevelHashMatrix[index] = HashingFunctions.generateHashMatrix(maxElementsInBucket[index]);
         for (Entry<K, V> entry : temp) {
+            if (entry == null) {
+                continue;
+            }
             put(entry.getKey(), entry.getValue());
         }
     }
 
     public void print() {
+        int i = 1;
         for (ArrayList<Entry<K, V>> entries : table) {
             for (Entry<K, V> entry : entries) {
                 if (entry == null) {
                     continue;
                 } else {
-                    System.out.println(entry.getKey());
+                    System.out.println(i + "- " + entry.getKey());
+                    i++;
                 }
             }
         }

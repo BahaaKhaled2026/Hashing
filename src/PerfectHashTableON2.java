@@ -56,7 +56,7 @@ public class PerfectHashTableON2<E> {
     public void insert(E input) {
         elements.put(input, 1);
         if (elements.size() > size * loadFactor) {
-            size *= 2;
+            size *= size;
             createPerfectHashTable();
         }
         int key = input.hashCode();

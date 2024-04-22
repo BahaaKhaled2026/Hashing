@@ -120,7 +120,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
 
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\insertTest.txt";
+        String batchPath = "src\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -148,7 +148,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
 
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\insertTest.txt";
+        String batchPath = "src\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -175,7 +175,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Insertion [O(N^2)]")
     public void BatchInsertionOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\insertTest.txt";
+        String batchPath = "src\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -199,7 +199,7 @@ public class PerfectHashTableONTest {
         @DisplayName("Batch Deletion [O(N^2)]")
         public void BatchDeletionOn2() throws IOException {
             var HashON2 = new PerfectHashTableON2<>();
-            String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\deleteTest.txt";
+            String batchPath = "src\\deleteTest.txt";
 
             BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -228,7 +228,7 @@ public class PerfectHashTableONTest {
         public void BatchInsertionWithSameCharsOn() throws IOException {
             var HashON = new PerfectHashTableON<String, String>();
             var bo = new BatchOperations();
-            String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
+            String batchPath = "src\\CustomInsert.txt";
 
             BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -254,8 +254,8 @@ public class PerfectHashTableONTest {
     public void BatchDeletionWithSameCharsOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
-        String batchPath_2 = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert_2.txt";
+        String batchPath = "src\\CustomInsert.txt";
+        String batchPath_2 = "src\\CustomInsert_2.txt";
 
         BufferedReader reader_1 = new BufferedReader(new FileReader(batchPath));
         BufferedReader reader_2 = new BufferedReader(new FileReader(batchPath_2));
@@ -297,7 +297,7 @@ public class PerfectHashTableONTest {
     public void MultipleBatchInsertionWithSameCharsOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
+        String batchPath = "src\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -325,7 +325,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Insertion With Same Chars [O(N^2)]")
     public void BatchInsertionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
+        String batchPath = "src\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -350,7 +350,7 @@ public class PerfectHashTableONTest {
     @DisplayName("multiple Batch Insertion With Same Chars [O(N^2)]")
     public void MultipleBatchInsertionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
+        String batchPath = "src\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -377,8 +377,8 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Deletion With Same Chars [O(N^2)]")
     public void BatchDeletionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert.txt";
-        String batchPath_2 = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\CustomInsert_2.txt";
+        String batchPath = "src\\CustomInsert.txt";
+        String batchPath_2 = "src\\CustomInsert_2.txt";
 
         BufferedReader reader_1 = new BufferedReader(new FileReader(batchPath));
         BufferedReader reader_2 = new BufferedReader(new FileReader(batchPath_2));
@@ -423,8 +423,7 @@ public class PerfectHashTableONTest {
     public void HugeBatchInsertion_200_ON() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\bigInsertion(200+).txt";
-
+        String batchPath = "src\\bigInsertion(200+).txt";
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
         List<String> wordsList = new ArrayList<>();
@@ -449,7 +448,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Huge Batch Insertion [O(N^2)] 200+")
     public void HugeBatchInsertion_200_On2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\bigInsertion(200+).txt";
+        String batchPath = "src\\bigInsertion(200+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -474,7 +473,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Huge Batch Insertion [O(N^2)] 500+")
     public void HugeBatchInsertion_500_On2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\bigInsertion(500+).txt";
+        String batchPath = "src\\bigInsertion(500+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -498,8 +497,8 @@ public class PerfectHashTableONTest {
     @Test
     @DisplayName("Huge Batch Insertion [O(N^2)] 1000+")
     public void HugeBatchInsertion_1000_On2() throws IOException {
-        var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\bigInsertion(1000+).txt";
+        var HashON2 = new PerfectHashTableON2<>(2000);
+        String batchPath = "src\\bigInsertion(1000+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -519,13 +518,37 @@ public class PerfectHashTableONTest {
             assertEquals(HashON2.search(word), word);
         }
     }
+    @Test
+    @DisplayName("Huge Batch Insertion [O(N)] 1000+")
+    public void HugeBatchInsertion_1000_On() throws IOException {
+        var HashON = new PerfectHashTableON<String,String>();
+        String batchPath = "src\\bigInsertion(1000+).txt";
+
+        BufferedReader reader = new BufferedReader(new FileReader(batchPath));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        BatchOperations.batchInsert(batchPath, HashON);
+        for (String word : wordsList) {
+            assertEquals(HashON.get(word), word);
+        }
+    }
 
     @Test
     @DisplayName("Long words Insertion [O(N)]")
     public void LongWordsInsertionOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\LongStrings.txt";
+        String batchPath = "src\\LongStrings.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -551,7 +574,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Long words Insertion [O(N^2)]")
     public void LongWordsInsertionOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "C:\\Users\\ALI\\Documents\\GitHub\\Hashing\\src\\LongStrings.txt";
+        String batchPath = "src\\LongStrings.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
