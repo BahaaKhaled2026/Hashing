@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PerfectHashTableON2<E> {
-
+    private int numberOfCollisions;
     private int counter;
     private int size; // Size of the hash table
     int[][] hashMatrix; // Hash matrix for the hashing
@@ -17,6 +17,7 @@ public class PerfectHashTableON2<E> {
         this.size = 500;
         this.hashMatrix = HashingFunctions.generateHashMatrix(this.size);
         this.table = (E[]) new Object[size];
+        this.numberOfCollisions = 0;
     }
 
     public PerfectHashTableON2(int cap) {
@@ -26,6 +27,8 @@ public class PerfectHashTableON2<E> {
         this.size = cap * cap;
         this.hashMatrix = HashingFunctions.generateHashMatrix(this.size);
         this.table = (E[]) new Object[size];
+        this.numberOfCollisions = 0;
+
     }
 
     // Method to perform perfect hashing using the O(N^2) method
@@ -65,6 +68,7 @@ public class PerfectHashTableON2<E> {
             table[hashValue] = input;
         } else {
             System.out.println("Collision detected");
+            this.numberOfCollisions++;
             createPerfectHashTable();
         }
     }
@@ -109,22 +113,48 @@ public class PerfectHashTableON2<E> {
     }
 
     public void batchInsertFromFile(String filePath) {
+        int i = 0;
+        int oldSize = elements.size();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while((line = br.readLine()) != null){
+                i++;
+            }
+            this.size =this.size+ (i * i);
+            createPerfectHashTable();
+        } catch (IOException e) {
+            
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 insert((E) line);
             }
+            System.out.println("Number of duplicates: " + (-(elements.size()-oldSize - i)));
+            System.out.println("Number of collisions: " + numberOfCollisions);
+            this.numberOfCollisions = 0;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void batchDeleteFromFile(String filePath) {
+        int i = 0;
+        int oldSize = elements.size();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while((line = br.readLine()) != null){
+                i++;
+            }
+        } catch (IOException e) {
+            
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 delete((E) line);
             }
+            System.out.println("Number of elements not found: " + (-(-elements.size()+oldSize - i)));
         } catch (IOException e) {
             e.printStackTrace();
         }
