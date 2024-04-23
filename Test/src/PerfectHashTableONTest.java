@@ -1,9 +1,9 @@
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<>();
         String s = "book";
         HashON.put(s,s);
-        assertEquals(HashON.get(s), s);
+        Assertions.assertEquals(HashON.get(s), s);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class PerfectHashTableONTest {
         var HashON2 = new PerfectHashTableON2<>();
         String s = "book";
         HashON2.insert(s);
-        assertEquals(HashON2.search(s), s);
+        Assertions.assertEquals(HashON2.search(s), s);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<>();
         String s = "";
         HashON.put(s, s);
-        assertEquals(HashON.get(s), s);
+        Assertions.assertEquals(HashON.get(s), s);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class PerfectHashTableONTest {
         var HashON2 = new PerfectHashTableON2<>();
         String s = "";
         HashON2.insert(s);
-        assertEquals(HashON2.search(s), s);
+        Assertions.assertEquals(HashON2.search(s), s);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<>();
         String s = "book";
         HashON.remove(s);
-        assertNotEquals(HashON.get(s), s);
+        Assertions.assertNotEquals(HashON.get(s), s);
     }
 
     @Test
@@ -63,9 +63,9 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<>();
         String s = "book";
         HashON.put(s,s);
-        assertEquals(HashON.get(s), s);
+        Assertions.assertEquals(HashON.get(s), s);
         HashON.remove(s);
-        assertNotEquals(HashON.get(s), s);
+        Assertions.assertNotEquals(HashON.get(s), s);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class PerfectHashTableONTest {
         var HashON2 = new PerfectHashTableON2<>();
         String s = "book";
         HashON2.delete(s);
-        assertNotEquals(HashON2.search(s), s);
+        Assertions.assertNotEquals(HashON2.search(s), s);
     }
 
     @Test
@@ -83,9 +83,9 @@ public class PerfectHashTableONTest {
         var HashON2 = new PerfectHashTableON2<>();
         String s = "book";
         HashON2.insert(s);
-        assertEquals(HashON2.search(s), s);
+        Assertions.assertEquals(HashON2.search(s), s);
         HashON2.delete(s);
-        assertNotEquals(HashON2.search(s), s);
+        Assertions.assertNotEquals(HashON2.search(s), s);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class PerfectHashTableONTest {
             HashON.put(s,s);
         }
         HashON.remove(s);
-        assertNotEquals(HashON.get(s), s);
+        Assertions.assertNotEquals(HashON.get(s), s);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class PerfectHashTableONTest {
             HashON2.insert(s);
         }
         HashON2.delete(s);
-        assertNotEquals(HashON2.search(s), s);
+        Assertions.assertNotEquals(HashON2.search(s), s);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
 
-        String batchPath = "src\\insertTest.txt";
+        String batchPath = "src\\Files\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -138,7 +138,7 @@ public class PerfectHashTableONTest {
         bo.batchInsert(batchPath, HashON);
 
         for (String word : wordsList) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
     }
 
@@ -148,7 +148,7 @@ public class PerfectHashTableONTest {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
 
-        String batchPath = "src\\insertTest.txt";
+        String batchPath = "src\\Files\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -166,7 +166,7 @@ public class PerfectHashTableONTest {
         bo.batchDelete(batchPath, HashON);
 
         for (String word : wordsList) {
-            assertNotEquals(HashON.get(word), word);
+            Assertions.assertNotEquals(HashON.get(word), word);
         }
     }
 
@@ -175,7 +175,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Insertion [O(N^2)]")
     public void BatchInsertionOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\insertTest.txt";
+        String batchPath = "src\\Files\\insertTest.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -192,14 +192,14 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
         @Test
         @DisplayName("Batch Deletion [O(N^2)]")
         public void BatchDeletionOn2() throws IOException {
             var HashON2 = new PerfectHashTableON2<>();
-            String batchPath = "src\\deleteTest.txt";
+            String batchPath = "src\\Files\\deleteTest.txt";
 
             BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -216,7 +216,7 @@ public class PerfectHashTableONTest {
 
             HashON2.batchDeleteFromFile(batchPath);
             for (String word : wordsList) {
-                assertNotEquals(HashON2.search(word), word);
+                Assertions.assertNotEquals(HashON2.search(word), word);
             }
         }
 
@@ -228,7 +228,7 @@ public class PerfectHashTableONTest {
         public void BatchInsertionWithSameCharsOn() throws IOException {
             var HashON = new PerfectHashTableON<String, String>();
             var bo = new BatchOperations();
-            String batchPath = "src\\CustomInsert.txt";
+            String batchPath = "src\\Files\\CustomInsert.txt";
 
             BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -245,7 +245,7 @@ public class PerfectHashTableONTest {
 
             bo.batchInsert(batchPath, HashON);
             for (String word : wordsList) {
-                assertEquals(HashON.get(word), word);
+                Assertions.assertEquals(HashON.get(word), word);
             }
         }
 
@@ -254,8 +254,8 @@ public class PerfectHashTableONTest {
     public void BatchDeletionWithSameCharsOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "src\\CustomInsert.txt";
-        String batchPath_2 = "src\\CustomInsert_2.txt";
+        String batchPath = "src\\Files\\CustomInsert.txt";
+        String batchPath_2 = "src\\Files\\CustomInsert_2.txt";
 
         BufferedReader reader_1 = new BufferedReader(new FileReader(batchPath));
         BufferedReader reader_2 = new BufferedReader(new FileReader(batchPath_2));
@@ -283,11 +283,11 @@ public class PerfectHashTableONTest {
 //        bo.batchDelete(batchPath_2, HashON);
 
         for (String word : wordsList_1) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
 
         for (String word : wordsList_2) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
 
     }
@@ -297,7 +297,7 @@ public class PerfectHashTableONTest {
     public void MultipleBatchInsertionWithSameCharsOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "src\\CustomInsert.txt";
+        String batchPath = "src\\Files\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -317,7 +317,7 @@ public class PerfectHashTableONTest {
         bo.batchDelete(batchPath, HashON);
 
         for (String word : wordsList) {
-            assertNotEquals(HashON.get(word), word);
+            Assertions.assertNotEquals(HashON.get(word), word);
         }
     }
         // O(N) with same chars ends here
@@ -325,7 +325,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Insertion With Same Chars [O(N^2)]")
     public void BatchInsertionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\CustomInsert.txt";
+        String batchPath = "src\\Files\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -342,7 +342,7 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
 
@@ -350,7 +350,7 @@ public class PerfectHashTableONTest {
     @DisplayName("multiple Batch Insertion With Same Chars [O(N^2)]")
     public void MultipleBatchInsertionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\CustomInsert.txt";
+        String batchPath = "src\\Files\\CustomInsert.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -369,7 +369,7 @@ public class PerfectHashTableONTest {
         HashON2.batchInsertFromFile(batchPath);
         HashON2.batchDeleteFromFile(batchPath);
         for (String word : wordsList) {
-            assertNotEquals(HashON2.search(word), word);
+            Assertions.assertNotEquals(HashON2.search(word), word);
         }
     }
 
@@ -377,8 +377,8 @@ public class PerfectHashTableONTest {
     @DisplayName("Batch Deletion With Same Chars [O(N^2)]")
     public void BatchDeletionWithSameCharsOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\CustomInsert.txt";
-        String batchPath_2 = "src\\CustomInsert_2.txt";
+        String batchPath = "src\\Files\\CustomInsert.txt";
+        String batchPath_2 = "src\\Files\\CustomInsert_2.txt";
 
         BufferedReader reader_1 = new BufferedReader(new FileReader(batchPath));
         BufferedReader reader_2 = new BufferedReader(new FileReader(batchPath_2));
@@ -407,11 +407,11 @@ public class PerfectHashTableONTest {
         HashON2.batchDeleteFromFile(batchPath_2);
 
         for (String word : wordsList_1) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
 
         for (String word : wordsList_2) {
-            assertNotEquals(HashON2.search(word), word);
+            Assertions.assertNotEquals(HashON2.search(word), word);
         }
     }
 
@@ -423,7 +423,7 @@ public class PerfectHashTableONTest {
     public void HugeBatchInsertion_200_ON() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "src\\bigInsertion(200+).txt";
+        String batchPath = "src\\Files\\bigInsertion(200+).txt";
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
         List<String> wordsList = new ArrayList<>();
@@ -439,7 +439,7 @@ public class PerfectHashTableONTest {
 
         bo.batchInsert(batchPath, HashON);
         for (String word : wordsList) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
 
     }
@@ -448,7 +448,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Huge Batch Insertion [O(N^2)] 200+")
     public void HugeBatchInsertion_200_On2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\bigInsertion(200+).txt";
+        String batchPath = "src\\Files\\bigInsertion(200+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -465,7 +465,7 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
 
@@ -473,7 +473,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Huge Batch Insertion [O(N^2)] 500+")
     public void HugeBatchInsertion_500_On2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\bigInsertion(500+).txt";
+        String batchPath = "src\\Files\\bigInsertion(500+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -490,7 +490,7 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
 
@@ -498,7 +498,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Huge Batch Insertion [O(N^2)] 1000+")
     public void HugeBatchInsertion_1000_On2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\bigInsertion(1000+).txt";
+        String batchPath = "src\\Files\\bigInsertion(1000+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -515,14 +515,14 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
     @Test
     @DisplayName("Huge Batch Insertion [O(N)] 1000+")
     public void HugeBatchInsertion_1000_On() throws IOException {
         var HashON = new PerfectHashTableON<String,String>();
-        String batchPath = "src\\bigInsertion(1000+).txt";
+        String batchPath = "src\\Files\\bigInsertion(1000+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -539,7 +539,7 @@ public class PerfectHashTableONTest {
 
         BatchOperations.batchInsert(batchPath, HashON);
         for (String word : wordsList) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
     }
 
@@ -548,7 +548,7 @@ public class PerfectHashTableONTest {
     public void LongWordsInsertionOn() throws IOException {
         var HashON = new PerfectHashTableON<String, String>();
         var bo = new BatchOperations();
-        String batchPath = "src\\LongStrings.txt";
+        String batchPath = "src\\Files\\LongStrings.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -565,7 +565,7 @@ public class PerfectHashTableONTest {
 
         bo.batchInsert(batchPath, HashON);
         for (String word : wordsList) {
-            assertEquals(HashON.get(word), word);
+            Assertions.assertEquals(HashON.get(word), word);
         }
     }
 
@@ -574,7 +574,7 @@ public class PerfectHashTableONTest {
     @DisplayName("Long words Insertion [O(N^2)]")
     public void LongWordsInsertionOn2() throws IOException {
         var HashON2 = new PerfectHashTableON2<>();
-        String batchPath = "src\\LongStrings.txt";
+        String batchPath = "src\\Files\\LongStrings.txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));
 
@@ -591,7 +591,7 @@ public class PerfectHashTableONTest {
 
         HashON2.batchInsertFromFile(batchPath);
         for (String word : wordsList) {
-            assertEquals(HashON2.search(word), word);
+            Assertions.assertEquals(HashON2.search(word), word);
         }
     }
 

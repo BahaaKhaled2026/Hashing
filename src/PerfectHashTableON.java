@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PerfectHashTableON<K, V> {
+public class PerfectHashTableON<K, V>{
     public static class Entry<K, V> {
         private final K key;
         private V value;
@@ -34,6 +34,7 @@ public class PerfectHashTableON<K, V> {
     private static final int MAX_ELEMENTS_IN_BUCKET = 3;
     private int[][] firstLevelHashMatrix;
     private int[][][] secondLevelHashMatrix;
+    private long time;
 
     public PerfectHashTableON() {
         this(INITIAL_CAPACITY);
@@ -62,6 +63,7 @@ public class PerfectHashTableON<K, V> {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
+        time = 0;
         counter = 0;
         int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
         if (table[firstLevelHashIndex].isEmpty()) {
@@ -98,6 +100,7 @@ public class PerfectHashTableON<K, V> {
             ArrayList<Entry<K, V>> temp;
             int[][] secondLevelHashFunction;
             int usedSpace;
+            long startTime = System.currentTimeMillis();
             do {
                 secondLevelHashFunction = HashingFunctions.generateHashMatrix(maxElementsInBucket[firstLevelHashIndex]);
                 collision = false;
@@ -125,6 +128,8 @@ public class PerfectHashTableON<K, V> {
                     }
                 }
             } while (collision);
+            long endTime = System.currentTimeMillis();
+            time += endTime - startTime;
             table[firstLevelHashIndex] = temp;
             secondLevelHashMatrix[firstLevelHashIndex] = secondLevelHashFunction;
             realUsedSpaceOfBucket[firstLevelHashIndex] = usedSpace;
@@ -291,5 +296,8 @@ public class PerfectHashTableON<K, V> {
 
     public int getCollisions() {
         return counter;
+    }
+    public long getRebuildTime(){
+        return time;
     }
 }

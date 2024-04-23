@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PerfectHashTableON2<E> {
+public class PerfectHashTableON2<E>{
     private int numberOfCollisions;
     private int counter;
     private int size; // Size of the hash table
@@ -12,6 +12,7 @@ public class PerfectHashTableON2<E> {
     final private double loadFactor = 0.6; // Load factor for resizing
     E[] table;
     Map<E, Integer> elements = new HashMap<>();
+    long time;
 
     public PerfectHashTableON2() {
         this.size = 500;
@@ -35,6 +36,7 @@ public class PerfectHashTableON2<E> {
     public void createPerfectHashTable() {
         boolean collision;
         counter = 0;
+        long startTime = System.currentTimeMillis();
         do {
             collision = false;
             int[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
@@ -54,10 +56,13 @@ public class PerfectHashTableON2<E> {
                 this.table = table;
             }
         } while (collision);
+        long endTime = System.currentTimeMillis();
+        time = endTime - startTime;
     }
 
     public void insert(E input) {
         elements.put(input, 1);
+        time = 0;
         if (elements.size() > size * loadFactor) {
             size *= size;
             createPerfectHashTable();
@@ -162,5 +167,8 @@ public class PerfectHashTableON2<E> {
 
     public int getCollisions() {
         return counter;
+    }
+    public long getRebuildTime(){
+        return time;
     }
 }
