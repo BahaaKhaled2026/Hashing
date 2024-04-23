@@ -497,7 +497,7 @@ public class PerfectHashTableONTest {
     @Test
     @DisplayName("Huge Batch Insertion [O(N^2)] 1000+")
     public void HugeBatchInsertion_1000_On2() throws IOException {
-        var HashON2 = new PerfectHashTableON2<>(2000);
+        var HashON2 = new PerfectHashTableON2<>();
         String batchPath = "src\\bigInsertion(1000+).txt";
 
         BufferedReader reader = new BufferedReader(new FileReader(batchPath));

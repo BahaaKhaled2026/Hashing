@@ -30,10 +30,10 @@ public class PerfectHashTableON<K, V> {
     private int size;
     private int[] realUsedSpaceOfBucket;
     private static final double MAX_LOAD_FACTOR = 0.75;
-    private static final int INITIAL_CAPACITY = 500;
+    private static final int INITIAL_CAPACITY = 10;
     private static final int MAX_ELEMENTS_IN_BUCKET = 3;
-    private boolean[][] firstLevelHashMatrix;
-    private boolean[][][] secondLevelHashMatrix;
+    private int[][] firstLevelHashMatrix;
+    private int[][][] secondLevelHashMatrix;
 
     public PerfectHashTableON() {
         this(INITIAL_CAPACITY);
@@ -50,7 +50,7 @@ public class PerfectHashTableON<K, V> {
         for (int i = 0; i < size; i++) {
             table[i] = new ArrayList<>();
         }
-        secondLevelHashMatrix = new boolean[size][][];
+        secondLevelHashMatrix = new int[size][][];
         maxElementsInBucket = new int[size];
         Arrays.fill(maxElementsInBucket, MAX_ELEMENTS_IN_BUCKET);
         this.size = 0;
@@ -71,7 +71,7 @@ public class PerfectHashTableON<K, V> {
         } else {
             boolean collision;
             ArrayList<Entry<K, V>> temp;
-            boolean[][] secondLevelHashFunction;
+            int[][] secondLevelHashFunction;
             int usedSpace;
             do {
                 secondLevelHashFunction = HashingFunctions.generateHashMatrix(maxElementsInBucket[firstLevelHashIndex]);
@@ -208,7 +208,7 @@ public class PerfectHashTableON<K, V> {
         realUsedSpaceOfBucket = new int[table.length];
         Arrays.fill(maxElementsInBucket, MAX_ELEMENTS_IN_BUCKET);
         firstLevelHashMatrix = HashingFunctions.generateHashMatrix(table.length);
-        secondLevelHashMatrix = new boolean[table.length][][];
+        secondLevelHashMatrix = new int[table.length][][];
         for (ArrayList<Entry<K, V>> bucket : temp) {
             if (bucket.isEmpty()) {
                 continue;
@@ -248,7 +248,7 @@ public class PerfectHashTableON<K, V> {
         }
     }
 
-    public int getCounter() {
+    public int getCollisions() {
         return counter;
     }
 }

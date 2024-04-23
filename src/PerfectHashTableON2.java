@@ -8,8 +8,8 @@ public class PerfectHashTableON2<E> {
 
     private int counter;
     private int size; // Size of the hash table
-    boolean[][] hashMatrix; // Hash matrix for the hashing
-    final private double loadFactor = 0.75; // Load factor for resizing
+    int[][] hashMatrix; // Hash matrix for the hashing
+    final private double loadFactor = 0.6; // Load factor for resizing
     E[] table;
     Map<E, Integer> elements = new HashMap<>();
 
@@ -34,7 +34,7 @@ public class PerfectHashTableON2<E> {
         counter = 0;
         do {
             collision = false;
-            boolean[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
+            int[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
             E[] table = (E[]) new Object[size];
             for (E item : elements.keySet()) {
                 int key = item.hashCode();
@@ -130,7 +130,7 @@ public class PerfectHashTableON2<E> {
         }
     }
 
-    public int getCounter() {
+    public int getCollisions() {
         return counter;
     }
 }
