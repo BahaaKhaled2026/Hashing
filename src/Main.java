@@ -54,11 +54,17 @@ public class Main {
                                 System.out.println("Enter Element to insert:");
                                 String insertElement = scanner.next();
                                 dictionary.put(insertElement, insertElement);
+                                System.out.println("Collisions: " + dictionary.getCollisions());
                                 break;
                             case 2:
                                 System.out.println("Enter Element to delete:");
                                 String deleteElement = scanner.next();
-                                dictionary.remove(deleteElement);
+                                if(dictionary.remove(deleteElement)){
+                                    System.out.println("Element deleted successfully.");
+                                }
+                                else{
+                                    System.out.println("Element not found.");
+                                }
                                 break;
                             case 3:
                                 System.out.println("Enter Element to search:");
@@ -84,14 +90,7 @@ public class Main {
                                     insertFilePath = scanner.nextLine();
                                     path = Paths.get(insertFilePath);
                                 }
-                                try (BufferedReader br = new BufferedReader(new FileReader(insertFilePath))) {
-                                    String line;
-                                    while ((line = br.readLine()) != null) {
-                                        dictionary.put(line, line);
-                                    }
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
+                                BatchOperations.batchInsert(insertFilePath, dictionary);
                                 break;
                             case 6:
                                 scanner.nextLine();
@@ -103,14 +102,7 @@ public class Main {
                                     deleteFilePath = scanner.nextLine();
                                     path2 = Paths.get(deleteFilePath);
                                 }
-                                try (BufferedReader br = new BufferedReader(new FileReader(deleteFilePath))) {
-                                    String line;
-                                    while ((line = br.readLine()) != null) {
-                                        dictionary.remove(line);
-                                    }
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
+                                BatchOperations.batchDelete(deleteFilePath, dictionary);
                                 break;
                             case 7:
                                 flag = false;

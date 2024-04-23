@@ -58,7 +58,7 @@ public class PerfectHashTableON<K, V> {
         realUsedSpaceOfBucket = new int[size];
     }
 
-    public void put(K key, V value) {
+    public boolean put(K key, V value) {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
@@ -68,7 +68,32 @@ public class PerfectHashTableON<K, V> {
             table[firstLevelHashIndex].add(new Entry<>(key, value));
             size++;
             realUsedSpaceOfBucket[firstLevelHashIndex]++;
+            return true;
         } else {
+            if(secondLevelHashMatrix[firstLevelHashIndex] != null){
+                int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
+                if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
+                    table[firstLevelHashIndex].set(secondLevelHashIndex, new Entry<>(key, value));
+                    realUsedSpaceOfBucket[firstLevelHashIndex]++;
+                    return true;
+                }
+                else if(table[firstLevelHashIndex].get(secondLevelHashIndex).getKey().equals(key)){
+                    if(table[firstLevelHashIndex].get(secondLevelHashIndex).getValue().equals(value)){
+                        return false;
+                    }
+                    table[firstLevelHashIndex].get(secondLevelHashIndex).setValue(value);
+                    return true;
+                }
+            }
+            else if(realUsedSpaceOfBucket[firstLevelHashIndex] == 1){
+                if(table[firstLevelHashIndex].get(0).getKey().equals(key)){
+                    if(table[firstLevelHashIndex].get(0).getValue().equals(value)){
+                        return false;
+                    }
+                    table[firstLevelHashIndex].get(0).setValue(value);
+                    return true;
+                }
+            }
             boolean collision;
             ArrayList<Entry<K, V>> temp;
             int[][] secondLevelHashFunction;
@@ -91,7 +116,7 @@ public class PerfectHashTableON<K, V> {
                     if (temp.get(index) != null && !temp.get(index).getKey().equals(entry.getKey())) {
                         collision = true;
                         counter++;
-                        System.out.println("Collision is detected");
+//                        System.out.println("Collision is detected");
                         break;
                     }
                     if (temp.get(index) == null) {
@@ -106,11 +131,12 @@ public class PerfectHashTableON<K, V> {
         }
         double loadFactor = (double) size / table.length;
         if (loadFactor > MAX_LOAD_FACTOR) {
-            resize();
+            resize(0);
         } else if ((double) realUsedSpaceOfBucket[firstLevelHashIndex] / maxElementsInBucket[firstLevelHashIndex] > MAX_LOAD_FACTOR) {
             maxElementsInBucket[firstLevelHashIndex] *= maxElementsInBucket[firstLevelHashIndex];
             resizeBucket(firstLevelHashIndex);
         }
+        return true;
     }
 
     public V get(K key) {
@@ -154,52 +180,64 @@ public class PerfectHashTableON<K, V> {
         }
     }
 
-    public void remove(K key) {
+    public boolean remove(K key) {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
         int firstLevelHashIndex = HashingFunctions.multiplyMatrix(firstLevelHashMatrix, HashingFunctions.decimalToBinary(key.hashCode())) % table.length;
-        if (table[firstLevelHashIndex].isEmpty()) {
-            System.out.println("Element is not exist in the table");
-            return;
+        if (realUsedSpaceOfBucket[firstLevelHashIndex] == 0) {
+//            System.out.println("Element is not exist in the table");
+            return false;
         } else if (realUsedSpaceOfBucket[firstLevelHashIndex] == 1) {
             if(secondLevelHashMatrix[firstLevelHashIndex] == null){
                 if (table[firstLevelHashIndex].get(0).getKey().equals(key)) {
                     table[firstLevelHashIndex].set(0, null);
                     realUsedSpaceOfBucket[firstLevelHashIndex]--;
-                    System.out.println("Element is removed");
+                    size--;
+//                    System.out.println("Element is removed");
+                    return true;
                 } else {
-                    System.out.println("Element is not exist in the table");
+//                    System.out.println("Element is not exist in the table");
+                    return false;
                 }
-                return;
             }
             int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
             if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
-                System.out.println("Element is not exist in the table");
+//                System.out.println("Element is not exist in the table");
+                return false;
             } else if (table[firstLevelHashIndex].get(secondLevelHashIndex).getKey().equals(key)) {
                 table[firstLevelHashIndex].set(secondLevelHashIndex, null);
                 realUsedSpaceOfBucket[firstLevelHashIndex]--;
-                System.out.println("Element is removed");
+//                System.out.println("Element is removed");
+                return true;
             } else {
-                System.out.println("Element is not exist in the table");
-                return;
+//                System.out.println("Element is not exist in the table");
+                return false;
             }
         } else {
             int secondLevelHashIndex = HashingFunctions.multiplyMatrix(secondLevelHashMatrix[firstLevelHashIndex], HashingFunctions.decimalToBinary(key.hashCode())) % maxElementsInBucket[firstLevelHashIndex];
             if (table[firstLevelHashIndex].get(secondLevelHashIndex) == null) {
-                System.out.println("Element is not exist in the table");
-                return;
+//                System.out.println("Element is not exist in the table");
+                return false;
             } else {
                 table[firstLevelHashIndex].set(secondLevelHashIndex, null);
                 realUsedSpaceOfBucket[firstLevelHashIndex]--;
-                System.out.println("Element is removed");
+//                System.out.println("Element is removed");
+                return true;
             }
         }
     }
 
-    public void resize() {
+    public void resize(int length) {
         ArrayList<Entry<K, V>>[] temp = table;
-        table = new ArrayList[table.length * 2];
+        if(length == 0) {
+            table = new ArrayList[table.length * 2];
+        }
+        else{
+            if(table.length-size < 2*length) {
+                table = new ArrayList[table.length + 2 * length];
+            }
+        }
         for (int i = 0; i < table.length; i++) {
             table[i] = new ArrayList<>();
         }
@@ -225,6 +263,9 @@ public class PerfectHashTableON<K, V> {
     public void resizeBucket(int index) {
         ArrayList<Entry<K, V>> temp = table[index];
         table[index] = new ArrayList<>();
+        for(int i = 0; i < maxElementsInBucket[index]; i++){
+            table[index].add(null);
+        }
         secondLevelHashMatrix[index] = HashingFunctions.generateHashMatrix(maxElementsInBucket[index]);
         for (Entry<K, V> entry : temp) {
             if (entry == null) {
