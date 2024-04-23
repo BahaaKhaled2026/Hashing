@@ -8,7 +8,7 @@ public class PerfectHashTableON2<E> {
     private int numberOfCollisions;
     private int counter;
     private int size; // Size of the hash table
-    int[][] hashMatrix; // Hash matrix for the hashing
+    boolean[][] hashMatrix; // Hash matrix for the hashing
     final private double loadFactor = 0.6; // Load factor for resizing
     E[] table;
     E[] tempTable;
@@ -49,7 +49,7 @@ public class PerfectHashTableON2<E> {
         }
         do {
             collision = false;
-            int[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
+            boolean[][] hashFunction = HashingFunctions.generateHashMatrix(this.size); // Generate random hash function
             E[] ansTable = (E[]) new Object[size];
             for (E item : tempTable) {
                 if (item != null) {
@@ -201,5 +201,8 @@ public class PerfectHashTableON2<E> {
     }
     public int getNumberOfElements(){
         return itemCounter;
+    }
+    public void setSize(int size){
+        this.size = size;
     }
 }

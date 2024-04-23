@@ -23,7 +23,7 @@ def plot_interpolated_double_data(data, input_sizes):
 
     # Plot each set of interpolated numbers against input sizes
     for i, numbers in enumerate(data):
-        ax.plot(input_sizes, numbers, label=f'Table initial size {table_sizes[i]}')  # Plot each set of numbers against input sizes
+        ax.plot(input_sizes, numbers)  # Plot each set of numbers against input sizes
     
     ax.set_xlabel('Input Size')
     ax.set_ylabel('Average Number Of Collisions')
@@ -31,23 +31,53 @@ def plot_interpolated_double_data(data, input_sizes):
     ax.legend()
     ax.grid(True)
 
-    # Create a table outside the plot to display table initial sizes
-    table_data = [[f'Table initial size {size}'] for size in table_sizes]
-    table = Table(ax, bbox=[1.1, 0, 0.3, 1.0])  # Adjust bbox for table position and size
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)
-    table.scale(1.2, 1.2)  # Adjust scaling of the table for better readability
-
-    # Add table initial sizes to the table
-    for i, (size,) in enumerate(table_data):
-        table.add_cell(i, 0, width=1, height=1, text=size, loc='left', edgecolor='none')
-
-    ax.add_table(table)
-
     plt.show()
 
 
-filename = 'src\\data3ON.txt'
+# filename = 'src\\data3ON.txt'
+ON_SINGLE_SPACE = 'A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\singleInsertONSpace.txt'
+ON_SINGLE_TIME='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\singleInsertONTime.txt'
+ON_SINGLE_COLLISIONS='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\singleInsertON.txt'
+ON_SINGLE_BUILD_TIME='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\singleInsertONRebuildTime'
+
+# ON_BATCH_SPACE='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\BatchInsertONSpace.txt'
+# ON_BATCH_TIME='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\BatchInsertONTime.txt'
+# ON_BATCH_COLLISIONS='A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\BatchInsertON.txt'
+# ON_BATCH_BUILD_TIME='"A:\\university\\year 2\\Second semester\\Data structure 2\\Labs\\lab 2\\Hashing\\DataAnalysis\\src\\Data\\BatchInsertONRebuildTime.txt"'
+
+# ON2_SINGLE_SPACE = 'singleInsertON2Space.txt'
+# ON2_SINGLE_TIME='singleInsertON2Time.txt'
+# ON2_SINGLE_COLLISIONS='singleInsertON2.txt'
+# ON2_SINGLE_BUILD_TIME='singleInsertON2ReuildTime.txt'
+
+# ON2_BATCH_SPACE='BatchInsertON2Space.txt'
+# ON2_BATCH_TIME='BatchInsertON2Time.txt'
+# ON2_BATCH_COLLISIONS='BatchInsertON2.txt'
+# ON2_BATCH_BUILD_TIME='BatchInsertON2ReuildTime.txt'
+
+
+
+
 input_sizes = np.arange(400, 4001, 500)
-data = read_double_data_from_file(filename, input_sizes)    
-plot_interpolated_double_data(data, input_sizes)
+batch_data = np.arange(400,20001,1000)
+single_insertion = np.arange(50,501,50)
+
+ON_collisions = read_double_data_from_file(ON_SINGLE_COLLISIONS, input_sizes)
+ON_space = read_double_data_from_file(ON_SINGLE_SPACE, input_sizes)
+ON_time = read_double_data_from_file(ON_SINGLE_TIME, input_sizes)
+ON_build_time = read_double_data_from_file(ON_SINGLE_BUILD_TIME, input_sizes)
+
+# ON_batch_collisions = read_double_data_from_file(ON_BATCH_COLLISIONS, input_sizes)
+# ON_batch_space = read_double_data_from_file(ON_BATCH_SPACE, input_sizes)
+# ON_batch_time = read_double_data_from_file(ON_BATCH_TIME, input_sizes)
+# ON_batch_build_time = read_double_data_from_file(ON_BATCH_BUILD_TIME, input_sizes)
+
+plot_interpolated_double_data(ON_collisions[0], input_sizes)
+plot_interpolated_double_data(ON_space[0], input_sizes)
+plot_interpolated_double_data(ON_time[0], input_sizes)
+plot_interpolated_double_data(ON_build_time[0], input_sizes)
+
+# plot_interpolated_double_data(ON_batch_collisions, input_sizes)
+# plot_interpolated_double_data(ON_batch_space, input_sizes)
+# plot_interpolated_double_data(ON_batch_time, input_sizes)
+# plot_interpolated_double_data(ON_batch_build_time, input_sizes)

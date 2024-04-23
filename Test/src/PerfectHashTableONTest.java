@@ -281,7 +281,6 @@ public class PerfectHashTableONTest {
         bo.batchInsert(batchPath, HashON);
         bo.batchInsert(batchPath_2, HashON);
 //        bo.batchDelete(batchPath_2, HashON);
-
         for (String word : wordsList_1) {
             Assertions.assertEquals(HashON.get(word), word);
         }
@@ -518,30 +517,7 @@ public class PerfectHashTableONTest {
             Assertions.assertEquals(HashON2.search(word), word);
         }
     }
-    @Test
-    @DisplayName("Huge Batch Insertion [O(N)] 1000+")
-    public void HugeBatchInsertion_1000_On() throws IOException {
-        var HashON = new PerfectHashTableON<String,String>();
-        String batchPath = "src\\Files\\bigInsertion(1000+).txt";
 
-        BufferedReader reader = new BufferedReader(new FileReader(batchPath));
-
-        List<String> wordsList = new ArrayList<>();
-
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            String[] words = line.split("\\s+");
-
-            Collections.addAll(wordsList, words);
-        }
-        reader.close();
-
-        BatchOperations.batchInsert(batchPath, HashON);
-        for (String word : wordsList) {
-            Assertions.assertEquals(HashON.get(word), word);
-        }
-    }
 
     @Test
     @DisplayName("Long words Insertion [O(N)]")
@@ -594,7 +570,30 @@ public class PerfectHashTableONTest {
             Assertions.assertEquals(HashON2.search(word), word);
         }
     }
+    @Test
+    @DisplayName("Huge Batch Insertion [O(N)] 1000+")
+    public void HugeBatchInsertion_1000_On() throws IOException {
+        var HashON = new PerfectHashTableON<String,String>();
+        String batchPath = "src\\Files\\bigInsertion(1000+).txt";
 
+        BufferedReader reader = new BufferedReader(new FileReader(batchPath));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        BatchOperations.batchInsert(batchPath, HashON);
+        for (String word : wordsList) {
+            Assertions.assertEquals(HashON.get(word), word);
+        }
+    }
 
 
 }
