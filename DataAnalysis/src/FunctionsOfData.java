@@ -76,7 +76,7 @@ public class FunctionsOfData {
             }
         }
         space.add(spaceUsed/numTrials);
-        reBuildTime.add(reBuildTimeMillis);
+        reBuildTime.add(reBuildTimeMillis/numTrials);
         time.add(elapsedTimeMillis/numTrials);
         return  numCollisions / numTrials;
     }
@@ -107,6 +107,7 @@ public class FunctionsOfData {
                 long startTime = System.currentTimeMillis();
                 dictionary.setSize(dictionary.getSize()+(input.length*input.length));
                 reBuildTimeMillis += dictionary.getRebuildTime();
+                dictionary.createPerfectHashTable();
                 for (int num : input) {
                     dictionary.insert(num);
                     reBuildTimeMillis += dictionary.getRebuildTime();
@@ -118,7 +119,7 @@ public class FunctionsOfData {
             }
         }
         reBuildTime.add(reBuildTimeMillis/numTrials);
-        time.add(elapsedTimeMillis);
+        time.add(elapsedTimeMillis/numTrials);
         space.add(spaceUsed/numTrials);
         return numCollisions / numTrials;
     }

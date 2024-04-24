@@ -75,6 +75,10 @@ public class PerfectHashTableON<K, V>{
             table[firstLevelHashIndex].set(0, new Entry<>(key, value));
             size++;
             realUsedSpaceOfBucket[firstLevelHashIndex]++;
+            double loadFactor = (double) size / table.length;
+            if (loadFactor > MAX_LOAD_FACTOR) {
+                resize(0);
+            }
             return true;
         }
         else {

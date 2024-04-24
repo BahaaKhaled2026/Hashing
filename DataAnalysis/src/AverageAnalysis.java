@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class AverageAnalysis {
     public static void batchInsertAnalysis(boolean isON2){
-        int inputSize = 400;
+        int inputSize = 500;
         int numTrials = 7;
         ArrayList<Integer> data = new ArrayList<>();
         ArrayList<Long> time = new ArrayList<>();
         ArrayList<Long> reBuildTime = new ArrayList<>();
         ArrayList<Integer> space = new ArrayList<>();
-        for(int i = inputSize; i<=20000;i+=1000){
+        for(int i = inputSize; i<=20000;i+=500){
             int[] input = new int[i];
             FunctionsOfData.generateRandomInput(input, i);
             int avr = FunctionsOfData.generateAverageBatchInsertCollisions(input, numTrials, isON2, time, reBuildTime, space);
@@ -28,16 +28,16 @@ public class AverageAnalysis {
         }
     }
     public static void singleInsertAnalysis(boolean isON2){
-        int tableSize = 200;
+        int tableSize = 1000;
         int inputSize = 50;
         int numTrials = 20;
         ArrayList<Integer> data;
         ArrayList<Long> time = new ArrayList<>();
         ArrayList<Long> reBuildTime = new ArrayList<>();
         ArrayList<Integer> space = new ArrayList<>();
-        for (int i = tableSize; i <= 2000; i += 200) { // change table size
+        for (int i = tableSize; i <= 5000; i += 500) { // change table size
             data = new ArrayList<>();
-            for (int j = inputSize; j <= 500; j +=50 ) { // change input size
+            for (int j = inputSize; j <= 1500; j +=50 ) { // change input size
                 int[] input = new int[j];
                 FunctionsOfData.generateRandomInput(input, j);
                 int avr = FunctionsOfData.generateAverageCollisions(input, i, numTrials, isON2, time, reBuildTime, space);
