@@ -21,10 +21,10 @@ public class AverageAnalysis {
             FunctionsOfData.writeSpaceToFile("DataAnalysis\\src\\Data\\BatchInsertON2Space.txt", space, false);
         }
         else{
-            FunctionsOfData.writeDataToFile("DataAnalysis\\src\\Data\\BatchInsertON.txt", data, false);
-            FunctionsOfData.writeTimeToFile("DataAnalysis\\src\\Data\\BatchInsertONTime.txt", time, false);
-            FunctionsOfData.writeTimeToFile("DataAnalysis\\src\\Data\\BatchInsertONRebuildTime.txt", reBuildTime, false);
-            FunctionsOfData.writeSpaceToFile("DataAnalysis\\src\\Data\\BatchInsertONSpace.txt", space, false);
+            FunctionsOfData.writeDataToFile("DataAnalysis\\src\\Data\\BatchInsertON.txt", data, true);
+            FunctionsOfData.writeTimeToFile("DataAnalysis\\src\\Data\\BatchInsertONTime.txt", time, true);
+            FunctionsOfData.writeTimeToFile("DataAnalysis\\src\\Data\\BatchInsertONRebuildTime.txt", reBuildTime, true);
+            FunctionsOfData.writeSpaceToFile("DataAnalysis\\src\\Data\\BatchInsertONSpace.txt", space, true);
         }
     }
     public static void singleInsertAnalysis(boolean isON2){

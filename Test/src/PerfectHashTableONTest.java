@@ -594,6 +594,50 @@ public class PerfectHashTableONTest {
             Assertions.assertEquals(HashON.get(word), word);
         }
     }
+    @Test
+    @DisplayName("Heap overflow O(N)")
+    public void HeapOverFlowON() throws IOException {
+        var HashON = new PerfectHashTableON<String, String>();
+        String path = "src\\Files\\words_3.txt";
+        BufferedReader reader = new BufferedReader(new FileReader(path));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        assertThrows(OutOfMemoryError.class, () -> {
+            BatchOperations.batchInsert(path, HashON);
+        });
+    }
+    @Test
+    @DisplayName("Heap overflow O(N^2)")
+    public void HeapOverFlowON2() throws IOException {
+        var HashON = new PerfectHashTableON2<String>();
+        String path = "src\\Files\\unique_words.txt";
+        BufferedReader reader = new BufferedReader(new FileReader(path));
+
+        List<String> wordsList = new ArrayList<>();
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            String[] words = line.split("\\s+");
+
+            Collections.addAll(wordsList, words);
+        }
+        reader.close();
+
+        assertThrows(NegativeArraySizeException.class, () -> {
+            HashON.batchInsertFromFile(path);
+        });
+    }
 
 
 }

@@ -253,7 +253,7 @@ public class PerfectHashTableON<K, V>{
             table = new ArrayList[table.length * 2];
         }
         else{
-            if(table.length-size < 2*length) {
+            if((table.length-size) * MAX_LOAD_FACTOR < 2*length) {
                 table = new ArrayList[table.length + 2 * length];
             }
             else{
