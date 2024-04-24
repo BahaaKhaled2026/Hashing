@@ -147,7 +147,7 @@ public class PerfectHashTableON2<E> {
             while ((line = br.readLine()) != null) {
                 i++;
             }
-            this.size = this.size + (i * i);
+            this.size = (int)Math.ceil(Math.sqrt(this.size)) + (i * i);
             createPerfectHashTable();
         } catch (IOException e) {
 
